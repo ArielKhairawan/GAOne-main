@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
 
     private function seedRoles(): void
     {
-      
+
         Role::whereNotIn('name', self::FINAL_ROLES)->get()->each(function (Role $role) {
             $role->delete();
         });

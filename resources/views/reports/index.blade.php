@@ -1,26 +1,8 @@
 @extends('layouts.app')
 
 @section('title', 'Reports')
-@section('page-title', 'Dashboard & Reporting')
-@section('page-subtitle', 'Export laporan operasional dan analitik sistem dalam format PDF atau CSV')
 
 @section('content')
-
-<div class="mb-5">
-    <span class="section-eyebrow">Analytics</span>
-    <h1 class="section-title">Laporan Operasional</h1>
-    <p class="section-subtitle">Unduh data dalam format PDF atau CSV untuk keperluan pelaporan.</p>
-</div>
-
-@php
-$reports = [
-    'travel'  => ['label' => 'Travel',          'icon' => '✈️',  'desc' => 'Biaya perjalanan dinas & akomodasi karyawan.', 'color' => '#3b82f6'],
-    'booking' => ['label' => 'Booking',          'icon' => '📅',  'desc' => 'Pemesanan fasilitas, kendaraan, & ruang rapat.', 'color' => '#8b5cf6'],
-    'atk'     => ['label' => 'ATK',              'icon' => '📝',  'desc' => 'Pengadaan & pemakaian alat tulis kantor.',        'color' => '#f59e0b'],
-    'po'      => ['label' => 'Purchase Order',   'icon' => '🧾',  'desc' => 'Seluruh permintaan pembelian & realisasinya.',   'color' => '#10b981'],
-    'csat'    => ['label' => 'CSAT',             'icon' => '⭐',  'desc' => 'Skor kepuasan & umpan balik layanan internal.',  'color' => '#e11d48'],
-];
-@endphp
 
 <div class="row g-4">
     @foreach($reports as $type => $r)

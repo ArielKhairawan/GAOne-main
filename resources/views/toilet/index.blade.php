@@ -1,22 +1,23 @@
 @extends('layouts.app')
 
 @section('title', 'Monitoring Kebersihan WC')
-@section('page-title', 'Monitoring Kebersihan WC')
-@section('page-subtitle', 'Total ' . $inspections->total() . ' data inspeksi tercatat.')
 
 @section('content')
 
-<!-- =========================================================
-     HEADER (TOMBOL AKSI)
-     ========================================================= -->
 <div class="d-flex justify-content-end align-items-center mb-4">
     <div class="d-flex align-items-center gap-2">
         @can('toilet.export')
-        <a class="btn btn-sm" href="{{ route('toilet.export.pdf', $filters) }}" style="background: rgba(225,29,72,.1); color: #E11D48; border: none; font-weight: 600; padding: 8px 16px; border-radius: 8px; font-family: 'Poppins', sans-serif;">Unduh PDF</a>
-        <a class="btn btn-sm" href="{{ route('toilet.export.excel', $filters) }}" style="background: rgba(16,185,129,.1); color: #10B981; border: none; font-weight: 600; padding: 8px 16px; border-radius: 8px; font-family: 'Poppins', sans-serif;">Unduh Excel</a>
+        <a class="btn btn-sm" href="{{ route('toilet.export.pdf', $filters) }}" style="background: rgba(239, 68, 68, 0.1); color: #EF4444; border: none; font-weight: 600; padding: 10px 18px; border-radius: 8px; font-family: 'Poppins', sans-serif; display: inline-flex; align-items: center; gap: 6px;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z"/></svg>
+            Unduh PDF
+        </a>
+        <a class="btn btn-sm" href="{{ route('toilet.export.excel', $filters) }}" style="background: rgba(16, 185, 129, 0.1); color: #10B981; border: none; font-weight: 600; padding: 10px 18px; border-radius: 8px; font-family: 'Poppins', sans-serif; display: inline-flex; align-items: center; gap: 6px;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            Unduh Excel
+        </a>
         @endcan
         @can('toilet.create')
-        <a class="btn btn-sm" href="{{ route('toilet.create') }}" style="background: #3B82F6; color: #ffffff; border: none; font-weight: 600; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 6px; font-family: 'Poppins', sans-serif;">
+        <a class="btn btn-sm" href="{{ route('toilet.create') }}" style="background: #3B82F6; color: #ffffff; border: none; font-weight: 600; padding: 10px 18px; border-radius: 8px; font-family: 'Poppins', sans-serif; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.15);">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
             Tambah Inspeksi
         </a>
@@ -24,125 +25,83 @@
     </div>
 </div>
 
-<!-- =========================================================
-     1. KARTU STATISTIK (FLEXBOX ANTI-MELAR)
-     ========================================================= -->
-<div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
-    <!-- Total Inspeksi -->
-    <div style="flex: 1 1 250px; min-width: 0;">
-        <div class="metric-card" style="padding: 20px; background: #ffffff; border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
-            <div style="font-size: 13px; font-weight: 600; color: #64748B; margin-bottom: 12px;">Total Inspeksi Hari Ini</div>
-            <div style="font-size: 26px; font-weight: 700; color: #3B82F6; line-height: 1.2;">{{ $stats['total_hari_ini'] }} <span style="font-size: 14px; font-weight: 600; color: #64748B;">Laporan</span></div>
+<form method="get" class="metric-card mb-4" style="border-radius: 16px; background: #ffffff; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.02); padding: 20px 24px; font-family: 'Poppins', sans-serif;">
+    <div class="row g-3 align-items-center">
+        <div class="col-md-3">
+            <label class="form-label" style="font-size: 12px; font-weight: 600; color: #475569;">Tanggal Awal</label>
+            <input type="date" name="date_from" class="form-control form-control-sm" value="{{ $filters['date_from'] ?? '' }}" style="background: #ffffff; border: 1px solid #E2E8F0; font-size: 13px; border-radius: 6px; height: 38px;">
         </div>
-    </div>
-    <!-- WC Bersih -->
-    <div style="flex: 1 1 250px; min-width: 0;">
-        <div class="metric-card" style="padding: 20px; background: #ffffff; border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
-            <div style="font-size: 13px; font-weight: 600; color: #64748B; margin-bottom: 12px;">Kondisi Bersih</div>
-            <div style="font-size: 26px; font-weight: 700; color: #10B981; line-height: 1.2;">{{ $stats['bersih'] }} <span style="font-size: 14px; font-weight: 600; color: #64748B;">Lokasi</span></div>
+        <div class="col-md-3">
+            <label class="form-label" style="font-size: 12px; font-weight: 600; color: #475569;">Tanggal Akhir</label>
+            <input type="date" name="date_to" class="form-control form-control-sm" value="{{ $filters['date_to'] ?? '' }}" style="background: #ffffff; border: 1px solid #E2E8F0; font-size: 13px; border-radius: 6px; height: 38px;">
         </div>
-    </div>
-    <!-- WC Perlu Tindakan -->
-    <div style="flex: 1 1 250px; min-width: 0;">
-        <div class="metric-card" style="padding: 20px; background: #ffffff; border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
-            <div style="font-size: 13px; font-weight: 600; color: #64748B; margin-bottom: 12px;">Perlu Tindakan</div>
-            <div style="font-size: 26px; font-weight: 700; color: #E11D48; line-height: 1.2;">{{ $stats['perlu_tindakan'] }} <span style="font-size: 14px; font-weight: 600; color: #64748B;">Lokasi</span></div>
-        </div>
-    </div>
-</div>
-
-<!-- =========================================================
-     2. FILTER PENCARIAN (FLEXBOX + POPPINS)
-     ========================================================= -->
-<form method="get" class="metric-card mb-4" style="padding: 20px 24px; border-radius: 16px; background: #ffffff; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
-    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end;">
-        <div style="flex: 1 1 140px;">
-            <label style="font-size: 12px; font-weight: 600; color: #64748B; margin-bottom: 6px; display: block;">Dari Tanggal</label>
-            <input type="date" name="date_from" class="form-control" style="background: #F8FAFC; border: 1px solid #E2E8F0; font-family: 'Poppins', sans-serif; font-size: 13px; width: 100%;" value="{{ $filters['date_from'] ?? '' }}">
-        </div>
-        <div style="flex: 1 1 140px;">
-            <label style="font-size: 12px; font-weight: 600; color: #64748B; margin-bottom: 6px; display: block;">Sampai Tanggal</label>
-            <input type="date" name="date_to" class="form-control" style="background: #F8FAFC; border: 1px solid #E2E8F0; font-family: 'Poppins', sans-serif; font-size: 13px; width: 100%;" value="{{ $filters['date_to'] ?? '' }}">
-        </div>
-        <div style="flex: 2 1 200px;">
-            <label style="font-size: 12px; font-weight: 600; color: #64748B; margin-bottom: 6px; display: block;">Lokasi</label>
-            <select name="lokasi" class="form-select" style="background: #F8FAFC; border: 1px solid #E2E8F0; font-family: 'Poppins', sans-serif; font-size: 13px; width: 100%;">
+        <div class="col-md-4">
+            <label class="form-label" style="font-size: 12px; font-weight: 600; color: #475569;">Lokasi / Toilet</label>
+            <select name="toilet_location" class="form-select form-select-sm" style="background: #ffffff; border: 1px solid #E2E8F0; font-size: 13px; border-radius: 6px; height: 38px;">
                 <option value="">— Semua Lokasi —</option>
-                @foreach($locations as $loc)
-                    <option value="{{ $loc }}" @selected(($filters['lokasi'] ?? '') === $loc)>{{ $loc }}</option>
+                @foreach(config('monitoring.toilet_locations', []) as $loc)
+                    <option value="{{ $loc }}" @selected(($filters['toilet_location'] ?? '') === $loc)>{{ $loc }}</option>
                 @endforeach
             </select>
         </div>
-        <div style="flex: 1 1 160px;">
-            <label style="font-size: 12px; font-weight: 600; color: #64748B; margin-bottom: 6px; display: block;">Petugas</label>
-            <input type="text" name="petugas" class="form-control" style="background: #F8FAFC; border: 1px solid #E2E8F0; font-family: 'Poppins', sans-serif; font-size: 13px; width: 100%;" placeholder="Nama..." value="{{ $filters['petugas'] ?? '' }}">
-        </div>
-        <div style="flex: 1 1 140px;">
-            <label style="font-size: 12px; font-weight: 600; color: #64748B; margin-bottom: 6px; display: block;">Status</label>
-            <select name="status" class="form-select" style="background: #F8FAFC; border: 1px solid #E2E8F0; font-family: 'Poppins', sans-serif; font-size: 13px; width: 100%;">
-                <option value="">— Semua —</option>
-                @foreach($statuses as $value => $label)
-                    <option value="{{ $value }}" @selected(($filters['status'] ?? '') === $value)>{{ $label }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div style="flex: 0 0 120px;">
-            <button class="btn w-100" style="background: var(--surface-3); color: var(--text); border: 1px solid var(--border); font-weight: 600; height: 38px; font-family: 'Poppins', sans-serif; font-size: 13px;">Filter Data</button>
+        <div class="col-md-2 mt-4 pt-2">
+            <button class="btn btn-sm px-4" style="background: #475569; color: #ffffff; border: none; font-weight: 600; height: 36px; border-radius: 6px; font-size: 13px; width: 100%;">Terapkan Filter</button>
         </div>
     </div>
 </form>
 
-<!-- =========================================================
-     3. TABEL DATA (ELEGAN)
-     ========================================================= -->
-<div class="metric-card mb-4" style="padding: 0; overflow: hidden; border-radius: 16px; background: #ffffff; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+<div class="metric-card mb-4" style="border-radius: 16px; background: #ffffff; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.02); overflow: hidden;">
     <div class="table-responsive">
-        <table class="table align-middle mb-0" style="width: 100%; border-collapse: collapse;">
-            <thead style="background: #F8FAFC; border-bottom: 1px solid var(--border);">
-                <tr>
-                    <th style="padding: 16px 24px; font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Waktu Inspeksi</th>
-                    <th style="padding: 16px 24px; font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Lokasi Toilet</th>
-                    <th style="padding: 16px 24px; font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Petugas</th>
-                    <th style="padding: 16px 24px; font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Status & Temuan</th>
-                    <th class="text-end" style="padding: 16px 24px; font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Aksi</th>
+        <table class="table align-middle mb-0" style="font-family: 'Poppins', sans-serif; font-size: 13.5px; width: 100%;">
+            <thead>
+                <tr style="background: #F8FAFC; border-bottom: 1px solid var(--border);">
+                    <th style="padding: 16px 24px; font-weight: 700; color: #475569; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; width: 15%;">Tanggal</th>
+                    <th style="padding: 16px 24px; font-weight: 700; color: #475569; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;">Lokasi WC</th>
+                    <th style="padding: 16px 24px; font-weight: 700; color: #475569; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;">Inspektor</th>
+                    <th style="padding: 16px 24px; font-weight: 700; color: #475569; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;">Kondisi Umum</th>
+                    <th style="padding: 16px 24px; font-weight: 700; color: #475569; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; text-align: right; width: 15%;">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
-                @forelse($inspections as $inspection)
-                <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
-                    <td style="padding: 16px 24px;">
-                        <div style="font-size: 13.5px; font-weight: 600; color: #0F172A;">{{ $inspection->tanggal->format('d M Y') }}</div>
-                        <div style="font-size: 12px; color: #64748B;">Pukul {{ $inspection->jam }}</div>
+            <tbody style="border-top: none;">
+                @forelse($inspections as $ins)
+                <tr style="border-bottom: 1px solid #F1F5F9; transition: background 0.2s ease;" onmouseover="this.style.backgroundColor='#F8FAFC'" onmouseout="this.style.backgroundColor='transparent'">
+                    <td style="padding: 18px 24px; color: #64748B; font-weight: 500;">
+                        {{ $ins->inspected_at->format('d M Y H:i') }}
                     </td>
-                    <td style="padding: 16px 24px; font-size: 13.5px; color: #0F172A; font-weight: 600;">
-                        {{ $inspection->lokasi_detail ?: $inspection->lokasi }}
+                    <td style="padding: 18px 24px; font-weight: 700; color: #0F172A;">
+                        {{ $ins->toilet_location }}
                     </td>
-                    <td style="padding: 16px 24px; font-size: 13.5px; color: #475569; font-weight: 500;">
-                        {{ $inspection->petugas_name ?? '—' }}
+                    <td style="padding: 18px 24px; color: #475569; font-weight: 500;">
+                        {{ $ins->inspector->name ?? '—' }}
                     </td>
-                    <td style="padding: 16px 24px;">
-                        <div style="margin-bottom: 4px;">
-                            @if($inspection->status === 'bersih')
-                                <span style="background: rgba(16,185,129,.15); color: #10B981; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700;">{{ $statuses[$inspection->status] ?? 'Bersih' }}</span>
-                            @else
-                                <span style="background: rgba(225,29,72,.15); color: #E11D48; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700;">{{ $statuses[$inspection->status] ?? 'Kotor/Rusak' }}</span>
-                            @endif
-                        </div>
-                        @php $bermasalah = $inspection->items->whereIn('status', ['kurang', 'rusak'])->count(); @endphp
-                        <div style="font-size: 12px; color: #64748B;">
-                            {{ $bermasalah > 0 ? $bermasalah . ' Item Bermasalah' : 'Semua Aman' }}
-                        </div>
+                    <td style="padding: 18px 24px; color: #334155;">
+                        @php
+                            $dirtyCount = $ins->items->where('status', 'kotor')->count();
+                        @endphp
+                        @if($dirtyCount > 0)
+                            <span style="background: rgba(239,68,68,0.1); color: #EF4444; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">
+                                {{ $dirtyCount }} Item Kotor
+                            </span>
+                        @else
+                            <span style="background: rgba(16,185,129,0.1); color: #10B981; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">
+                                Semua Bersih
+                            </span>
+                        @endif
                     </td>
-                    <td class="text-end" style="padding: 16px 24px;">
+                    <td style="padding: 18px 24px; text-align: right;">
                         <div class="d-flex gap-2 justify-content-end">
-                            <a class="btn btn-sm" href="{{ route('toilet.show', $inspection) }}" style="background: rgba(15,23,42,.05); color: #0F172A; border: none; font-weight: 600; padding: 6px 14px; border-radius: 8px; font-family: 'Poppins', sans-serif;">Detail</a>
                             @can('toilet.edit')
-                            <a class="btn btn-sm" href="{{ route('toilet.edit', $inspection) }}" style="background: rgba(59,130,246,.1); color: #3B82F6; border: none; font-weight: 600; padding: 6px 14px; border-radius: 8px; font-family: 'Poppins', sans-serif;">Edit</a>
+                            <a class="btn btn-sm" href="{{ route('toilet.edit', $ins) }}" style="background: #ffffff; color: #F59E0B; border: 1px solid #FDE68A; font-weight: 600; padding: 6px 14px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s;">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                Edit
+                            </a>
                             @endcan
                             @can('toilet.delete')
-                            <form class="d-inline m-0" method="post" action="{{ route('toilet.destroy', $inspection) }}" onsubmit="return confirm('Hapus data inspeksi ini secara permanen?')">
+                            <form method="post" action="{{ route('toilet.destroy', $ins) }}" onsubmit="return confirm('Hapus data inspeksi ini?')" style="display: inline;">
                                 @csrf @method('DELETE')
-                                <button class="btn btn-sm" style="background: rgba(225,29,72,.1); color: #E11D48; border: none; font-weight: 600; padding: 6px 14px; border-radius: 8px; font-family: 'Poppins', sans-serif;">Hapus</button>
+                                <button class="btn btn-sm" style="background: #ffffff; color: #EF4444; border: 1px solid #FEE2E2; font-weight: 600; padding: 6px 14px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s;">
+                                    Hapus
+                                </button>
                             </form>
                             @endcan
                         </div>
@@ -150,14 +109,12 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" style="text-align:center; padding: 64px 24px;">
-                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                            <div style="width: 56px; height: 56px; background: rgba(59, 130, 246, 0.1); color: #3B82F6; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-                                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                            </div>
-                            <div style="font-size: 16px; font-weight: 700; color: #0F172A; margin-bottom: 4px;">Data Kosong</div>
-                            <div style="font-size: 13px; color: #64748B;">Belum ada inspeksi yang sesuai dengan kriteria pencarian.</div>
+                    <td colspan="5" style="text-align: center; padding: 64px 24px; color: #94A3B8;">
+                        <div style="width: 56px; height: 56px; background: rgba(59, 130, 246, 0.1); color: #3B82F6; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\" ry=\"2\"></rect><circle cx=\"8.5\" cy=\"8.5\" r=\"1.5\"></circle><polyline points=\"21 15 16 10 5 21\"></polyline></svg>
                         </div>
+                        <div style="font-weight: 600; font-size: 14px; color: #64748B;">Data Kosong</div>
+                        <div style="font-size: 12.5px; color: #94A3B8; margin-top: 4px;">Belum ada inspeksi yang sesuai dengan kriteria pencarian.</div>
                     </td>
                 </tr>
                 @endforelse
@@ -166,7 +123,7 @@
     </div>
 </div>
 
-<div class="mt-4 mb-5">
+<div class="mt-4" style="font-family: 'Poppins', sans-serif;">
     {{ $inspections->links() }}
 </div>
 

@@ -13,8 +13,8 @@
 
     <style>
         :root {
-            --primary: #2563EB;
-            --primary-hover: #1D4ED8;
+            --primary: #203A63;
+            --primary-hover: #070A13;
             --primary-soft: #DBEAFE;
 
             --text: #0F172A;
@@ -224,7 +224,7 @@
     <div class="footer">
         Ingat password?
         <a href="{{ route('login') }}">
-            Kembali ke Login
+            Masuk di sini
         </a>
     </div>
 

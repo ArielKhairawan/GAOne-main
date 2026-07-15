@@ -60,7 +60,7 @@
                     </svg>
                 </button>
                 <div>
-                    <div class="page-title">@yield('page-title', 'Dashboard')</div>
+                    <div class="page-title">@yield('page-title', 'Laporan')</div>
                     <div class="page-subtitle d-none d-md-block">@yield('page-subtitle', 'Ringkasan aktivitas sesuai role Anda')</div>
                 </div>
             </div>

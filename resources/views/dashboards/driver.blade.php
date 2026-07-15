@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<div class="card">
+<div class="card mb-4">
     <div style="padding:16px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center">
         <span class="metric-label">Riwayat Pengisian BBM</span>
         @can('fuel.create')
@@ -41,6 +41,25 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="card">
+    <div style="padding:16px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center">
+        <span class="metric-label">Pengajuan SIK Saya</span>
+        @can('sik.create')
+        <a href="{{ route('sik.create') }}" class="small">+ Buat Baru</a>
+        @endcan
+    </div>
+    <div class="card-body p-0">
+        @forelse($data['sik_saya'] as $s)
+        <div style="padding:12px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between">
+            <span style="font-size:13.5px">{{ $s->jenis_izin_label }} &middot; {{ $s->created_at->format('d M') }}</span>
+            <span class="status-badge {{ $s->status === 'approved' || $s->status === 'completed' ? 'active' : ($s->status === 'rejected' ? 'inactive' : 'pending') }}">{{ $s->status_label }}</span>
+        </div>
+        @empty
+        <div style="padding:24px; text-align:center; color:var(--text-3); font-size:13px">Belum ada pengajuan SIK.</div>
+        @endforelse
     </div>
 </div>
 

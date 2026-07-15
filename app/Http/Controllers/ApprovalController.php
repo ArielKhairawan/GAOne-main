@@ -10,15 +10,25 @@ use App\Services\ApprovalEngine;
 use App\Services\Inventory\AtkRequestService;
 use App\Services\Meeting\ConsumptionRequestService;
 use App\Services\Meeting\MeetingBookingService;
+use App\Services\Sik\ApprovalSIKService;
 use Illuminate\Http\Request;
 
 class ApprovalController extends Controller
 {
-    public function index()
+    public function index(Request $request, ApprovalSIKService $sikApprovals)
     {
+        $user = $request->user();
+
         return view('approvals.index', [
             'pending' => ApprovalInstance::with('approvable')->where('status', 'pending')->latest()->paginate(15),
             'history' => ApprovalInstance::whereIn('status', ['approved', 'rejected', 'revision'])->latest()->limit(25)->get(),
+            // Modul SIK tidak memakai ApprovalInstance/ApprovalWorkflow (lihat
+            // ApprovalSIKService), jadi antriannya diambil terpisah lalu
+            // ditampilkan sebagai section tambahan di halaman Persetujuan yang
+            // sama supaya user tidak perlu buka menu approval yang beda-beda.
+            'sikPending' => $user->can('sik.approve')
+                ? $sikApprovals->queueFor($user, [], (int) config('sik.per_page', 15))
+                : null,
         ]);
     }
 

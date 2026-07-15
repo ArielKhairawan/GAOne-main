@@ -69,4 +69,27 @@
     </div>
 </div>
 
+@can('sik.approve')
+<div class="row g-4 mt-2">
+    <div class="col-md-12">
+        <div class="card">
+            <div style="padding:16px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center">
+                <span class="metric-label">Pengajuan SIK Menunggu Persetujuan ({{ $data['sik_menunggu'] }})</span>
+                <a href="{{ route('sik.approvals.index') }}" class="small">Lihat Semua</a>
+            </div>
+            <div class="card-body p-0">
+                @forelse($data['sik_pending_list'] as $s)
+                <div style="padding:12px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between">
+                    <span style="font-size:13.5px">{{ $s->user->name ?? '—' }} &middot; {{ $s->department ?: '—' }} &middot; {{ $s->jenis_izin_label }}</span>
+                    <a href="{{ route('sik.approvals.show', $s) }}" class="small">Proses</a>
+                </div>
+                @empty
+                <div style="padding:24px; text-align:center; color:var(--text-3); font-size:13px">Tidak ada pengajuan SIK menunggu.</div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+</div>
+@endcan
+
 @include('dashboards.partials.notifications', ['notifications' => $data['notifications']])

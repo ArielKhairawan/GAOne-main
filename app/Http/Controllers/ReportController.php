@@ -16,6 +16,34 @@ class ReportController extends Controller
     public function index()
     {
         return view('reports.index', [
+            // Kartu ringkasan di bagian atas halaman Laporan. Key di sini
+            // ($type) dipakai langsung sebagai parameter route('reports.export', $type, ...)
+            'reports' => [
+                'travel' => [
+                    'label' => 'Perjalanan Dinas',
+                    'desc' => 'Rekap pengajuan dan estimasi biaya perjalanan dinas per departemen.',
+                    'icon' => '✈️',
+                    'color' => '#0ea5e9',
+                ],
+                'booking' => [
+                    'label' => 'Booking Fasilitas',
+                    'desc' => 'Ringkasan jumlah booking fasilitas/ruangan berdasarkan status.',
+                    'icon' => '🏢',
+                    'color' => '#f59e0b',
+                ],
+                'po' => [
+                    'label' => 'Purchase Order',
+                    'desc' => 'Rekap jumlah dan nilai purchase order berdasarkan status.',
+                    'icon' => '🧾',
+                    'color' => '#10b981',
+                ],
+                'csat' => [
+                    'label' => 'Kepuasan Layanan (CSAT)',
+                    'desc' => 'Skor rata-rata kepuasan dari seluruh survei yang masuk.',
+                    'icon' => '⭐',
+                    'color' => '#e11d48',
+                ],
+            ],
             'travel' => TravelRequest::selectRaw('department, count(*) as total, sum(estimated_cost) as cost')
                 ->join('users', 'users.id', '=', 'travel_requests.user_id')->groupBy('department')->get(),
             'booking' => FacilityBooking::selectRaw('status, count(*) as total')->groupBy('status')->get(),

@@ -27,6 +27,13 @@
             <div class="metric-value">{{ $data['aktivitas_hari_ini']['meeting'] }}</div>
         </div>
     </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card project-card" style="border-left-color: var(--violet, #8b5cf6)">
+            <div class="metric-card-accent" style="background: var(--violet, #8b5cf6)"></div>
+            <div class="metric-top"><span class="metric-label">Pengajuan SIK Hari Ini</span></div>
+            <div class="metric-value">{{ $data['aktivitas_hari_ini']['sik'] }}</div>
+        </div>
+    </div>
 </div>
 
 <div class="row g-4 mt-2">
@@ -73,13 +80,16 @@
         </div>
 
         <div class="card">
-            <div style="padding:16px 20px; border-bottom:1px solid var(--border)"><span class="metric-label">Permintaan ATK & Booking Meeting Terbaru</span></div>
+            <div style="padding:16px 20px; border-bottom:1px solid var(--border)"><span class="metric-label">Permintaan ATK, Meeting & SIK Terbaru</span></div>
             <div class="card-body p-0">
                 @foreach($data['atk_terbaru'] as $r)
                 <div style="padding:10px 20px; border-bottom:1px solid var(--border)"><span style="font-size:13px">📦 {{ $r->requester->name ?? '—' }} — {{ $r->department }}</span></div>
                 @endforeach
                 @foreach($data['meeting_terbaru'] as $b)
                 <div style="padding:10px 20px; border-bottom:1px solid var(--border)"><span style="font-size:13px">📅 {{ $b->nama_kegiatan }} — {{ $b->room->nama_ruangan ?? '—' }}</span></div>
+                @endforeach
+                @foreach($data['sik_terbaru'] as $s)
+                <div style="padding:10px 20px; border-bottom:1px solid var(--border)"><span style="font-size:13px">📝 {{ $s->user->name ?? '—' }} — {{ $s->jenis_izin_label }}</span></div>
                 @endforeach
             </div>
         </div>

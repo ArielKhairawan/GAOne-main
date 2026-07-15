@@ -1,4 +1,4 @@
-@canany(['fuel.view', 'vehicle.view', 'toilet.view', 'travel.view', 'sik.view'])
+@canany(['fuel.view', 'vehicle.view', 'toilet.view', 'travel.view'])
     <div class="sidebar-group">Operasional</div>
 
     @can('fuel.view')
@@ -29,10 +29,4 @@
     </a>
     @endcan
 
-    @can('sik.view')
-    <a href="{{ route('sik.dashboard') }}" class="{{ request()->routeIs('sik.dashboard') ? 'active' : '' }}">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm4 13H8v-2h8v2zm0-4H8v-2h8v2z"/></svg>
-        Monitoring SIK
-    </a>
-    @endcan
 @endcanany

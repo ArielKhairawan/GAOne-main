@@ -17,6 +17,7 @@ $kpis = [
     ['title' => 'Permintaan ATK', 'trend' => formatTrend($data['trend_atk'] ?? 0), 'val' => $data['total_permintaan_atk'], 'sub' => 'Permintaan tercatat'],
     ['title' => 'Pemesanan Ruangan', 'trend' => formatTrend($data['trend_meeting'] ?? 0), 'val' => $data['total_booking_meeting'], 'sub' => 'Ruangan terpakai'],
     ['title' => 'Permintaan Konsumsi', 'trend' => formatTrend($data['trend_konsumsi'] ?? 0), 'val' => $data['total_permintaan_konsumsi'], 'sub' => 'Pesanan aktif'],
+    ['title' => 'Surat Izin Keluar', 'trend' => formatTrend($data['trend_sik'] ?? 0), 'val' => $data['total_sik'], 'sub' => 'Pengajuan tercatat'],
     ['title' => 'Total Notifikasi', 'trend' => formatTrend($data['trend_notifikasi'] ?? 0), 'val' => $data['total_notifikasi'], 'sub' => 'Aktivitas terbaru'],
 ];
 @endphp
@@ -52,7 +53,7 @@ $kpis = [
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div style="font-weight: 700; font-size: 16px; color: #0F172A;">Pengeluaran BBM Bulanan</div>
                 <div class="d-flex align-items-center gap-2">
-                
+
                 </div>
             </div>
             <div style="position: relative; height: 260px; width: 100%;">

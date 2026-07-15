@@ -90,6 +90,72 @@
 
 <div class="mb-5">{{ $pending->links() }}</div>
 
+@if($sikPending)
+<div class="metric-card mb-4" style="padding: 0; overflow: hidden; border-radius: 16px; background: #ffffff; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+
+    <div style="padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #ffffff;">
+        <div>
+            <div style="font-weight: 700; font-size: 16px; color: #0F172A;">Menunggu Persetujuan SIK</div>
+            <div style="font-size: 13px; color: #64748B; margin-top: 2px;">Pengajuan Surat Izin Keluar yang menunggu persetujuan Anda</div>
+        </div>
+
+        @if($sikPending->total() > 0)
+            <div style="background: rgba(245, 158, 11, 0.15); color: #D97706; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                <span style="width: 8px; height: 8px; background: #D97706; border-radius: 50%;"></span>
+                {{ $sikPending->total() }} Menunggu
+            </div>
+        @else
+            <div style="background: rgba(16, 185, 129, 0.15); color: #10B981; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Semua Tuntas
+            </div>
+        @endif
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle mb-0" style="width: 100%; border-collapse: collapse;">
+            <thead style="background: #F8FAFC; border-bottom: 1px solid var(--border);">
+                <tr>
+                    <th style="padding: 14px 24px; font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Nama</th>
+                    <th style="padding: 14px 24px; font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Departemen</th>
+                    <th style="padding: 14px 24px; font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Jenis Izin</th>
+                    <th style="padding: 14px 24px; font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Diajukan</th>
+                    <th class="text-end" style="padding: 14px 24px; font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Tindakan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($sikPending as $sik)
+                <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+                    <td style="padding: 16px 24px; font-weight: 600; font-size: 14px; color: #0F172A;">
+                        {{ $sik->user->name }}
+                    </td>
+                    <td style="padding: 16px 24px; color: #64748B; font-size: 13px;">
+                        {{ $sik->department ?: '—' }}
+                    </td>
+                    <td style="padding: 16px 24px;">
+                        <span style="background: #F1F5F9; color: #475569; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700;">{{ $sik->jenis_izin_label }}</span>
+                    </td>
+                    <td style="padding: 16px 24px; color: #64748B; font-size: 13px;">
+                        {{ $sik->created_at->diffForHumans() }}
+                    </td>
+                    <td class="text-end" style="padding: 16px 24px;">
+                        <a href="{{ route('sik.approvals.show', $sik) }}" class="btn btn-sm" style="background: #3B82F6; color: #ffffff; font-weight: 600; padding: 6px 14px; border-radius: 8px;">Proses</a>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="5" style="text-align:center; padding: 48px 24px; color: #64748B; font-size: 13px;">Tidak ada pengajuan SIK yang menunggu persetujuan.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="mb-5">{{ $sikPending->links() }}</div>
+@endif
+
+
 
 <div class="metric-card" style="padding: 0; overflow: hidden; border-radius: 16px; background: #ffffff; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
 

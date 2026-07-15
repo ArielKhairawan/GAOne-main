@@ -8,6 +8,7 @@ use App\Models\Complaint;
 use App\Models\ConsumptionRequest;
 use App\Models\FuelLog;
 use App\Models\MeetingBooking;
+use App\Models\SuratIzinKeluar;
 use App\Models\SystemNotification;
 use App\Models\ToiletInspection;
 use App\Models\User;
@@ -70,6 +71,23 @@ class RoleDashboardService
             ->get();
     }
 
+    /**
+     * Pengajuan SIK yang menunggu persetujuan, di-scope sesuai departemen
+     * Manager (kecuali Admin/GA Staff yang bisa lihat semua) — logika sama
+     * persis dengan ApprovalSIKService::queueFor(), supaya angka & daftar
+     * yang tampil di Dashboard konsisten dengan halaman Persetujuan.
+     */
+    private function sikPendingFor(User $user, int $limit = 5)
+    {
+        $query = SuratIzinKeluar::query()->with('user')->where('status', 'pending_approval');
+
+        if ($user->hasRole('Manager') && ! $user->hasAnyRole(['Admin', 'GA Staff'])) {
+            $query->where('department', $user->department);
+        }
+
+        return (clone $query)->latest('created_at')->limit($limit)->get();
+    }
+
     private function forAdmin(User $user): array
     {
         return [
@@ -80,6 +98,7 @@ class RoleDashboardService
             'total_permintaan_atk' => AtkRequest::count(),
             'total_booking_meeting' => MeetingBooking::count(),
             'total_permintaan_konsumsi' => ConsumptionRequest::count(),
+            'total_sik' => SuratIzinKeluar::count(),
             'total_notifikasi' => SystemNotification::count(),
             // Sengaja TIDAK dikirim $user->id: Admin melihat semua notifikasi sistem.
             'notifications' => $this->recentNotifications(),
@@ -97,6 +116,8 @@ class RoleDashboardService
             'meeting_menunggu' => MeetingBooking::where('status', 'submitted')->count(),
             'atk_pending_list' => AtkRequest::with('requester')->where('status', 'submitted')->latest()->limit(5)->get(),
             'meeting_pending_list' => MeetingBooking::with(['requester', 'room'])->where('status', 'submitted')->latest()->limit(5)->get(),
+            'sik_menunggu' => (clone $this->sikPendingFor($user, 9999))->count(),
+            'sik_pending_list' => $this->sikPendingFor($user, 5),
             'notifications' => $this->recentNotifications($user->id),
         ];
     }
@@ -111,6 +132,7 @@ class RoleDashboardService
             'pengeluaran_bbm' => $fuelTotal,
             'pengeluaran_atk_note' => $atkMovementOutValue,
             'permintaan_konsumsi_selesai' => $consumptionCount,
+            'sik_saya' => SuratIzinKeluar::where('user_id', $user->id)->latest()->limit(5)->get(),
             'rekap' => [
                 'bbm' => $fuelTotal,
                 'po' => \App\Models\PurchaseOrder::whereIn('status', ['approved', 'ordered', 'completed'])->sum('total_amount'),
@@ -130,12 +152,14 @@ class RoleDashboardService
                 'toilet' => ToiletInspection::whereDate('tanggal', $today)->count(),
                 'atk' => AtkRequest::whereDate('created_at', $today)->count(),
                 'meeting' => MeetingBooking::whereDate('created_at', $today)->count(),
+                'sik' => SuratIzinKeluar::whereDate('created_at', $today)->count(),
             ],
             'kendaraan_servis' => Vehicle::where('status', 'servis')->get(),
             'fuel_terbaru' => FuelLog::with('vehicle')->latest('tanggal_pengisian')->limit(5)->get(),
             'toilet_terbaru' => ToiletInspection::latest('tanggal')->limit(5)->get(),
             'atk_terbaru' => AtkRequest::with('requester')->latest()->limit(5)->get(),
             'meeting_terbaru' => MeetingBooking::with(['requester', 'room'])->latest()->limit(5)->get(),
+            'sik_terbaru' => SuratIzinKeluar::with('user')->latest()->limit(5)->get(),
             'notifications' => $this->recentNotifications($user->id),
         ];
     }
@@ -145,6 +169,7 @@ class RoleDashboardService
         return [
             'kendaraan_saya' => Vehicle::where('driver_id', $user->id)->get(),
             'riwayat_bbm' => FuelLog::with('vehicle')->ownedBy($user->id)->latest('tanggal_pengisian')->limit(10)->get(),
+            'sik_saya' => SuratIzinKeluar::where('user_id', $user->id)->latest()->limit(5)->get(),
             'notifications' => $this->recentNotifications($user->id),
         ];
     }
@@ -158,6 +183,7 @@ class RoleDashboardService
                 return ! ToiletInspection::where('lokasi', $lokasi)->whereDate('tanggal', today())->exists();
             })->values(),
             'temuan_terbaru' => ToiletInspection::whereIn('status', ['kurang_bersih', 'kotor'])->latest('tanggal')->limit(5)->get(),
+            'sik_saya' => SuratIzinKeluar::where('user_id', $user->id)->latest()->limit(5)->get(),
             'notifications' => $this->recentNotifications($user->id),
         ];
     }
@@ -169,6 +195,7 @@ class RoleDashboardService
             'atk_saya' => AtkRequest::where('user_id', $user->id)->latest()->limit(5)->get(),
             'booking_saya' => MeetingBooking::with('room')->where('user_id', $user->id)->latest()->limit(5)->get(),
             'konsumsi_saya' => ConsumptionRequest::where('user_id', $user->id)->latest()->limit(5)->get(),
+            'sik_saya' => SuratIzinKeluar::where('user_id', $user->id)->latest()->limit(5)->get(),
             'notifications' => $this->recentNotifications($user->id),
         ];
     }

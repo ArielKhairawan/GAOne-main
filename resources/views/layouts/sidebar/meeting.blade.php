@@ -1,15 +1,17 @@
-@can('meeting.view')
-    <div class="sidebar-group">Meeting & Konsumsi</div>
+@canany(['meeting.view', 'consumption.view'])
+    <div class="sidebar-group">Fasilitas</div>
 
-    <a href="{{ route('meeting.bookings.index') }}" class="{{ request()->routeIs('meeting.bookings.*') ? 'active' : '' }}">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
-        Booking Ruang Meeting
-    </a>
-
-    @can('meeting.edit')
+    @can('meeting.view')
     <a href="{{ route('meeting.rooms.index') }}" class="{{ request()->routeIs('meeting.rooms.*') ? 'active' : '' }}">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg>
-        Master Ruangan
+        Manajemen Ruangan
+    </a>
+    @endcan
+
+    @can('facility.view')
+    <a href="{{ route('modules.index', 'facility-bookings') }}" class="{{ request()->is('modules/facility-bookings*') ? 'active' : '' }}">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+        Manajemen Fasilitas
     </a>
     @endcan
 
@@ -19,4 +21,4 @@
         Permintaan Konsumsi
     </a>
     @endcan
-@endcan
+@endcanany

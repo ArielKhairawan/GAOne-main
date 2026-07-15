@@ -10,7 +10,7 @@
 
     @can('sik.create')
     <a href="{{ route('sik.create') }}" class="{{ request()->routeIs('sik.create') || request()->routeIs('sik.store') ? 'active' : '' }}">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M13 11h6v2h-6v6h-2v-6H5v-2h6V5h2v6z"/></svg>
         Pengajuan SIK
     </a>
     @endcan
@@ -24,7 +24,7 @@
 
     @can('sik.scan')
     <a href="{{ route('sik.security.dashboard') }}" class="{{ request()->routeIs('sik.security.*') ? 'active' : '' }}">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM4 14h2v4h4v2H4v-6zm16 0h-2v4h-4v2h6v-6zM9 9h6v6H9V9z"/></svg>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 10h8v-8h-8v8z"/></svg>
         Scan Security
     </a>
     @endcan

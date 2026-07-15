@@ -2,7 +2,9 @@
     <div class="sidebar-group">Inventaris</div>
 
     <a href="{{ route('atk.items.index') }}" class="{{ request()->routeIs('atk.items.*') ? 'active' : '' }}">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 2.06 15.96 0 13.36 0 11.76 0 10.3.8 9.34 2.04L8 3.67 6.66 2.04A4.611 4.611 0 003.64 0C1.04 0-.96 2.06-.96 4.64c0 .48.11.92.18 1.36H-2v14h22V6zm-4 12H8V8h8v10z"/></svg>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 3h2v18H3V3zm6 6h2v12h-2V9zm6-4h2v16h-2V5z"/>
+        </svg>
         Data ATK
     </a>
 

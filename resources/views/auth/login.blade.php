@@ -14,17 +14,26 @@
 
     <style>
         :root {
-            --primary: #2563EB;
-            --primary-hover: #1D4ED8;
-            --primary-soft: #DBEAFE;
+            --primary: #203A63;
+            --primary-hover: #070A13;
+            --primary-soft: rgba(32, 58, 99, 0.1);
 
-            --background: #F8FAFC;
+            --accent: #D4B15A;
+            --accent-soft: #E5C87A;
+            --accent-glow: rgba(212, 177, 90, 0.25);
+
+            --background: #f5f9ff;
             --surface: #FFFFFF;
+            --surface-2: #f5f9ff;
+            --surface-3: rgba(182, 191, 204, 0.15);
 
-            --text: #0F172A;
+            --text: #070A13;
             --muted: #64748B;
+            --text-2: #203A63;
+            --text-3: #64748B;
+            --text-4: #B6BFCC;
 
-            --border: #E2E8F0;
+            --border: rgba(182, 191, 204, 0.4);
         }
 
         *{
@@ -41,26 +50,27 @@
             background:
                 radial-gradient(
                     circle at top left,
-                    rgba(37,99,235,0.25),
+                    var(--accent-glow),
                     transparent 35%
                 ),
                 radial-gradient(
                     circle at bottom right,
-                    rgba(59,130,246,0.20),
+                    rgba(32,58,99,0.12),
                     transparent 40%
                 ),
                 linear-gradient(
                     135deg,
-                    #F8FAFC 0%,
-                    #EFF6FF 100%
+                    var(--surface-2) 0%,
+                    #F8FAFC 100%
                 );
+            color: var(--text);
         }
 
         .login-card{
             width:100%;
             max-width:460px;
 
-            background:white;
+            background:var(--surface);
 
             border:1px solid var(--border);
 
@@ -69,8 +79,8 @@
             padding:40px;
 
             box-shadow:
-                0 1px 2px rgba(0,0,0,.05),
-                0 10px 30px rgba(15,23,42,.06);
+                0 1px 2px rgba(8,24,50,.05),
+                0 10px 30px rgba(8,24,50,.06);
         }
 
         .logo{
@@ -129,6 +139,8 @@
             outline:none;
 
             font-size:14px;
+            color:var(--text);
+            background:var(--surface);
 
             transition:.2s;
             box-sizing:border-box;
@@ -136,7 +148,7 @@
 
         .input:focus{
             border-color:var(--primary);
-            box-shadow:0 0 0 4px rgba(37,99,235,.12);
+            box-shadow:0 0 0 4px rgba(32,58,99,.12);
         }
 
         .btn-primary{
@@ -146,7 +158,7 @@
 
             background:var(--primary);
 
-            color:white;
+            color:var(--surface);
 
             padding:14px;
 
@@ -181,7 +193,7 @@
         }
 
         .divider span{
-            background:white;
+            background:var(--surface);
             padding:0 16px;
             position:relative;
             color:var(--muted);
@@ -191,7 +203,8 @@
         .google-btn{
             width:100%;
 
-            background:white;
+            background:var(--surface);
+            color:var(--text);
 
             border:1px solid var(--border);
 

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Persetujuan')
-@section('page-title', 'Persetujuan Dokumen')
+@section('page-title', 'Persetujuan')
 @section('page-subtitle', 'Pantau dan tindaklanjuti permintaan yang membutuhkan persetujuan')
 
 @section('content')
